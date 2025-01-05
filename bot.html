@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="pt-br" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pay4Go - Bots</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/js/all.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body class="bg-gray-900 text-gray-100 font-roboto">
+    <div class="flex h-screen">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-gray-800 p-6 flex flex-col justify-between">
+            <div>
+                <h1 class="text-2xl font-bold text-red-500 text-center mb-8">Pay4Go</h1>
+                <nav>
+                    <ul class="space-y-4">
+                        <li><a href="index.html" class="flex items-center px-4 py-2 rounded-md hover:bg-gray-700"><i class="fas fa-home mr-3"></i> Dashboard</a></li>
+                        <li><a href="bots.html" class="flex items-center px-4 py-2 rounded-md bg-gray-700"><i class="fas fa-robot mr-3"></i> Bots</a></li>
+                        <li><a href="usuarios.html" class="flex items-center px-4 py-2 rounded-md hover:bg-gray-700"><i class="fas fa-users mr-3"></i> Usuários</a></li>
+                        <li><a href="vendas.html" class="flex items-center px-4 py-2 rounded-md hover:bg-gray-700"><i class="fas fa-chart-line mr-3"></i> Vendas</a></li>
+                        <li><a href="assinantes.html" class="flex items-center px-4 py-2 rounded-md hover:bg-gray-700"><i class="fas fa-user-check mr-3"></i> Assinantes</a></li>
+                        <li><a href="remarketing.html" class="flex items-center px-4 py-2 rounded-md hover:bg-gray-700"><i class="fas fa-broadcast-tower mr-3"></i> Remarketing</a></li>
+                        <li><a href="notificacao.html" class="flex items-center px-4 py-2 rounded-md hover:bg-gray-700"><i class="fas fa-bell mr-3"></i> Notificação</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 p-6">
+            <!-- Header -->
+            <header class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold">Bots</h2>
+                <button id="add-bot-btn" class="px-4 py-2 bg-pink-500 text-gray-100 rounded-md hover:bg-pink-600">
+                    <i class="fas fa-plus mr-2"></i> Adicionar Bot
+                </button>
+            </header>
+
+            <!-- Placeholder Section -->
+            <section id="bot-list" class="bg-gray-800 p-6 rounded-lg shadow-md max-w-4xl mx-auto">
+                <p class="text-gray-400 text-center">Nenhum bot configurado ainda.</p>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modal -->
+    <div id="bot-popup" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+        <!-- Form 1 -->
+        <div id="form-1" class="bg-gray-800 p-8 rounded-lg shadow-md w-[800px]">
+            <!-- Form 1 Content -->
+            <div class="bg-gray-700 p-6 rounded-lg shadow-md mb-6">
+                <h4 class="text-xl font-bold text-gray-100 mb-4 flex items-center space-x-2">
+                    <i class="fas fa-info-circle text-pink-500"></i>
+                    <span>Grupo do Telegram</span>
+                </h4>
+                <ol class="list-decimal list-inside text-gray-300 space-y-3">
+                    <li>Criar um grupo no Telegram ou escolher um grupo já criado.</li>
+                    <li>Adicione o <span class="text-pink-500 font-bold">@pay4goBot</span> como administrador no grupo com todas as permissões.</li>
+                    <li>Copie o código ao lado e envie no grupo.</li>
+                    <li>Cole o <b>ID do grupo</b> que o bot enviou no campo abaixo.</li>
+                </ol>
+            </div>
+            <div class="flex items-center space-x-4 mb-6">
+                <span id="bot-code" class="px-8 py-4 bg-gray-700 text-gray-100 rounded-lg text-3xl font-semibold shadow-md tracking-wider">8RYLT</span>
+                <button id="copy-code-btn" class="px-4 py-2 bg-pink-500 text-gray-100 rounded-md hover:bg-pink-600 transition-shadow shadow-md">
+                    <i class="fas fa-copy"></i>
+                </button>
+            </div>
+            <input id="group-id-input" type="text" placeholder="Ex: -1234567898452" class="w-full px-4 py-2 bg-gray-700 text-gray-300 rounded-md shadow-md focus:outline-none focus:ring focus:ring-pink-500 mb-6">
+            <div class="flex justify-between w-full">
+                <button id="cancel-btn" class="px-6 py-2 bg-gray-500 text-gray-100 rounded-md hover:bg-gray-600 transition-shadow shadow-md">Voltar</button>
+                <button id="next-to-form-2" class="px-6 py-2 bg-pink-500 text-gray-100 rounded-md hover:bg-pink-600 transition-shadow shadow-md">Próximo</button>
+            </div>
+        </div>
+
+        <!-- Form 2 -->
+        <div id="form-2" class="bg-gray-800 p-8 rounded-lg shadow-md w-[800px] hidden">
+            <div class="bg-gray-700 p-6 rounded-lg shadow-md mb-6">
+                <h4 class="text-xl font-bold text-gray-100 mb-4 flex items-center space-x-2">
+                    <i class="fas fa-info-circle text-pink-500"></i>
+                    <span>Configurações</span>
+                </h4>
+                <ol class="list-decimal list-inside text-gray-300 space-y-3">
+                    <li>Crie um BOT pelo BotFather no Telegram e copie o token.</li>
+                    <li>Configure as permissões necessárias.</li>
+                </ol>
+            </div>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-gray-100">Categoria</label>
+                    <input type="text" placeholder="Categoria do bot" class="bg-gray-700 text-gray-300 rounded-md py-3 px-4 w-full">
+                </div>
+                <div>
+                    <label class="block text-gray-100">Token do Bot</label>
+                    <input type="text" placeholder="Token do bot" class="bg-gray-700 text-gray-300 rounded-md py-3 px-4 w-full">
+                </div>
+                <div class="flex flex-wrap gap-4">
+                    <div class="flex items-center">
+                        <label for="require-phone" class="text-gray-100 mr-2">Exigir Telefone</label>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input id="require-phone" type="checkbox" class="sr-only peer">
+                            <div class="w-11 h-6 bg-gray-400 rounded-full peer peer-checked:bg-pink-500"></div>
+                            <span class="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform peer-checked:translate-x-5"></span>
+                        </label>
+                    </div>
+                    <div class="flex items-center">
+                        <label for="require-email" class="text-gray-100 mr-2">Exigir E-mail</label>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input id="require-email" type="checkbox" class="sr-only peer">
+                            <div class="w-11 h-6 bg-gray-400 rounded-full peer peer-checked:bg-pink-500"></div>
+                            <span class="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform peer-checked:translate-x-5"></span>
+                        </label>
+                    </div>
+                    <div class="flex items-center">
+                        <label for="pix-enabled" class="text-gray-100 mr-2">Pix Ativo</label>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input id="pix-enabled" type="checkbox" class="sr-only peer">
+                            <div class="w-11 h-6 bg-gray-400 rounded-full peer peer-checked:bg-pink-500"></div>
+                            <span class="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform peer-checked:translate-x-5"></span>
+                        </label>
+                    </div>
+                    <div class="flex items-center">
+                        <label for="credit-card-enabled" class="text-gray-100 mr-2">Cartão de Crédito Ativo</label>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input id="credit-card-enabled" type="checkbox" class="sr-only peer">
+                            <div class="w-11 h-6 bg-gray-400 rounded-full peer peer-checked:bg-pink-500"></div>
+                            <span class="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform peer-checked:translate-x-5"></span>
+                        </label>
+                    </div>
+                </div>
+                <div class="flex justify-between mt-6">
+                    <button id="prev-to-form-1" class="px-6 py-2 bg-gray-500 text-gray-100 rounded-md hover:bg-gray-600 transition-shadow shadow-md">Voltar</button>
+                    <button id="next-to-form-3" class="px-6 py-2 bg-pink-500 text-gray-100 rounded-md hover:bg-pink-600 transition-shadow shadow-md">Próximo</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Form 3 -->
+        <div id="form-3" class="bg-gray-800 p-8 rounded-lg shadow-md w-[800px] hidden">
+            <div class="bg-gray-700 p-6 rounded-lg shadow-md mb-6">
+                <h4 class="text-xl font-bold text-gray-100 mb-4 flex items-center space-x-2">
+                    <i class="fas fa-info-circle text-pink-500"></i>
+                    <span>Personalização</span>
+                </h4>
+                <ol class="list-decimal list-inside text-gray-300 space-y-3">
+                    <li>Defina o nome e a descrição do seu bot.</li>
+                    <li>Adicione uma imagem ou vídeo de boas-vindas.</li>
+                    <li>Configure o botão de CTA.</li>
+                </ol>
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-gray-100">Nome</label>
+                    <input type="text" placeholder="Nome do bot" class="bg-gray-700 text-gray-300 rounded-md py-3 px-4 w-full">
+                </div>
+                <div>
+                    <label class="block text-gray-100">Descrição</label>
+                    <textarea placeholder="Descrição do bot" class="bg-gray-700 text-gray-300 rounded-md py-3 px-4 w-full h-24"></textarea>
+                </div>
+                <div class="col-span-2">
+                    <label class="block text-gray-100">Mensagem de Boas-vindas</label>
+                    <textarea placeholder="Mensagem de boas-vindas" class="bg-gray-700 text-gray-300 rounded-md py-3 px-4 w-full h-24"></textarea>
+                </div>
+                <div>
+                    <label class="block text-gray-100">Imagem/Vídeo de Boas-vindas</label>
+                    <input type="file" class="bg-gray-700 text-gray-300 rounded-md py-3 px-4 w-full">
+                    <p class="text-sm text-gray-400 mt-2">Tamanho recomendado de 1080x1080</p>
+                </div>
+                <div>
+                    <label class="block text-gray-100">Botão de CTA</label>
+                    <input type="text" placeholder="Texto do botão de CTA" class="bg-gray-700 text-gray-300 rounded-md py-3 px-4 w-full">
+                </div>
+                <div class="flex justify-between mt-6 col-span-2">
+                    <button id="prev-to-form-2" class="px-6 py-2 bg-gray-500 text-gray-100 rounded-md hover:bg-gray-600 transition-shadow shadow-md">Voltar</button>
+                    <button id="finalize-setup" class="px-6 py-2 bg-pink-500 text-gray-100 rounded-md hover:bg-pink-600 transition-shadow shadow-md">Finalizar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const form1 = document.getElementById("form-1");
+        const form2 = document.getElementById("form-2");
+        const form3 = document.getElementById("form-3");
+        const botPopup = document.getElementById("bot-popup");
+        const addBotBtn = document.getElementById("add-bot-btn");
+        const nextToForm2 = document.getElementById("next-to-form-2");
+        const nextToForm3 = document.getElementById("next-to-form-3");
+        const prevToForm1 = document.getElementById("prev-to-form-1");
+        const prevToForm2 = document.getElementById("prev-to-form-2");
+        const copyButton = document.getElementById("copy-code-btn");
+        const cancelBtn = document.getElementById("cancel-btn");
+
+        addBotBtn.addEventListener("click", () => {
+            botPopup.classList.remove("hidden");
+            form1.classList.remove("hidden");
+            form2.classList.add("hidden");
+            form3.classList.add("hidden");
+        });
+
+        nextToForm2.addEventListener("click", () => {
+            form1.classList.add("hidden");
+            form2.classList.remove("hidden");
+        });
+
+        nextToForm3.addEventListener("click", () => {
+            form2.classList.add("hidden");
+            form3.classList.remove("hidden");
+        });
+
+        prevToForm1.addEventListener("click", () => {
+            form2.classList.add("hidden");
+            form1.classList.remove("hidden");
+        });
+
+        prevToForm2.addEventListener("click", () => {
+            form3.classList.add("hidden");
+            form2.classList.remove("hidden");
+        });
+
+        copyButton.addEventListener("click", () => {
+            const botCode = document.getElementById("bot-code").textContent;
+            navigator.clipboard.writeText(botCode).then(() => {
+                alert("Código copiado para a área de transferência!");
+            });
+        });
+
+        cancelBtn.addEventListener("click", () => {
+            botPopup.classList.add("hidden");
+        });
+    </script>
+</body>
+</html>

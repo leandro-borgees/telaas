@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt-br" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pay4Go - Vendas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        // Configuração do flatpickr para intervalo de datas
+        document.addEventListener('DOMContentLoaded', () => {
+            flatpickr("#date-range", {
+                mode: "range",
+                dateFormat: "d/m/Y",
+                locale: {
+                    firstDayOfWeek: 0, // Domingo
+                },
+                onChange: function(selectedDates, dateStr, instance) {
+                    console.log("Datas selecionadas:", dateStr);
+                }
+            });
+        });
+    </script>
+</head>
+<body class="bg-gray-900 text-gray-100 font-roboto">
+    <div class="flex h-screen">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-gray-800 p-6 flex flex-col justify-between">
+            <div>
+                <h1 class="text-2xl font-bold text-red-500 text-center mb-8">Pay4Go</h1>
+                <nav>
+                    <ul class="space-y-4">
+                        <li>
+                            <a href="index.html" class="flex items-center px-4 py-2 rounded-md hover:bg-gray-700">
+                                <i class="fas fa-home mr-3"></i> Dashboard
+                            </a>
+                        </li>
+                        <li>
+                            <a href="bot.html" class="flex items-center px-4 py-2 rounded-md hover:bg-gray-700">
+                                <i class="fas fa-robot mr-3"></i> Bots
+                            </a>
+                        </li>
+                        <li>
+                            <a href="usuarios.html" class="flex items-center px-4 py-2 rounded-md hover:bg-gray-700">
+                                <i class="fas fa-users mr-3"></i> Usuários
+                            </a>
+                        </li>
+                        <li>
+                            <a href="vendas.html" class="flex items-center px-4 py-2 rounded-md bg-gray-700">
+                                <i class="fas fa-chart-line mr-3"></i> Vendas
+                            </a>
+                        </li>
+                        <li>
+                            <a href="assinantes.html" class="flex items-center px-4 py-2 rounded-md hover:bg-gray-700">
+                                <i class="fas fa-user-check mr-3"></i> Assinantes
+                            </a>
+                        </li>
+                        <li>
+                            <a href="remarketing.html" class="flex items-center px-4 py-2 rounded-md hover:bg-gray-700">
+                                <i class="fas fa-broadcast-tower mr-3"></i> Remarketing
+                            </a>
+                        </li>
+                        <li>
+                            <a href="notificacao.html" class="flex items-center px-4 py-2 rounded-md hover:bg-gray-700">
+                                <i class="fas fa-bell mr-3"></i> Notificação
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 p-6">
+            <!-- Header -->
+            <header class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl font-bold">Vendas</h2>
+                <div class="relative">
+                    <label for="date-range" class="sr-only">Selecionar intervalo de datas</label>
+                    <div class="flex items-center bg-gray-800 text-gray-100 px-4 py-3 rounded-lg border border-gray-700 shadow-md hover:shadow-lg focus-within:ring-2 focus-within:ring-red-500 cursor-pointer">
+                        <i class="fas fa-calendar-alt mr-3 text-gray-400 text-lg"></i>
+                        <input id="date-range" type="text" placeholder="Selecione o intervalo de datas"
+                            class="bg-transparent text-gray-100 placeholder-gray-400 focus:outline-none w-full text-sm">
+                    </div>
+                </div>
+            </header>
+
+            <!-- Search Bar -->
+            <div class="mb-4">
+                <input type="text" placeholder="Filtrar por username, plano, valor ou status" class="w-full px-4 py-2 bg-gray-800 text-gray-100 rounded-md border border-gray-700 focus:ring-2 focus:ring-red-500">
+            </div>
+
+            <!-- Table Section -->
+            <section>
+                <table class="w-full bg-gray-800 rounded-lg overflow-hidden">
+                    <thead class="bg-gray-700 text-gray-100">
+                        <tr>
+                            <th class="px-4 py-2 text-left">Status</th>
+                            <th class="px-4 py-2 text-left">Username</th>
+                            <th class="px-4 py-2 text-left">Bot</th>
+                            <th class="px-4 py-2 text-left">Método de pagamento</th>
+                            <th class="px-4 py-2 text-left">Valor</th>
+                            <th class="px-4 py-2 text-left">Feita em</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="6" class="text-center py-6 text-gray-400">Nenhuma transação encontrada.</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <!-- Pagination -->
+                <div class="mt-4 flex justify-end space-x-2">
+                    <button class="px-4 py-2 bg-red-500 text-gray-100 rounded-md hover:bg-red-600">Anterior</button>
+                    <button class="px-4 py-2 bg-red-500 text-gray-100 rounded-md hover:bg-red-600">Próxima</button>
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

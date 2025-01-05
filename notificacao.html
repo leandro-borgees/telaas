@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="pt-br" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pay4Go - Notificações</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body class="bg-gray-900 text-gray-100 font-roboto">
+    <div class="flex h-screen">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-gray-800 p-6 flex flex-col justify-between">
+            <div>
+                <h1 class="text-2xl font-bold text-red-500 text-center mb-8">Pay4Go</h1>
+                <nav>
+                    <ul class="space-y-4">
+                        <li><a href="index.html" class="flex items-center px-4 py-2 rounded-md hover:bg-gray-700"><i class="fas fa-home mr-3"></i> Dashboard</a></li>
+                        <li><a href="bot.html" class="flex items-center px-4 py-2 rounded-md hover:bg-gray-700"><i class="fas fa-robot mr-3"></i> Bots</a></li>
+                        <li><a href="usuarios.html" class="flex items-center px-4 py-2 rounded-md hover:bg-gray-700"><i class="fas fa-users mr-3"></i> Usuários</a></li>
+                        <li><a href="vendas.html" class="flex items-center px-4 py-2 rounded-md hover:bg-gray-700"><i class="fas fa-chart-line mr-3"></i> Vendas</a></li>
+                        <li><a href="assinantes.html" class="flex items-center px-4 py-2 rounded-md hover:bg-gray-700"><i class="fas fa-user-check mr-3"></i> Assinantes</a></li>
+                        <li><a href="remarketing.html" class="flex items-center px-4 py-2 rounded-md hover:bg-gray-700"><i class="fas fa-broadcast-tower mr-3"></i> Remarketing</a></li>
+                        <li><a href="notificacao.html" class="flex items-center px-4 py-2 rounded-md bg-gray-700"><i class="fas fa-bell mr-3"></i> Notificação</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 p-6">
+            <!-- Header -->
+            <header class="flex flex-col space-y-4 mb-6">
+                <h2 class="text-2xl font-bold">Alertas</h2>
+                <div class="bg-gray-800 p-6 rounded-lg shadow-md">
+                    <p class="text-lg font-bold text-pink-500">Para receber notificações de vendas pelo celular:</p>
+                    <button id="add-user-btn" class="mt-4 px-4 py-2 bg-pink-500 text-gray-100 rounded-md hover:bg-pink-600">
+                        <i class="fas fa-user-plus mr-2"></i> Adicionar usuário
+                    </button>
+                </div>
+            </header>
+
+            <!-- User Table -->
+            <section id="user-container" class="bg-gray-800 p-6 rounded-lg shadow-md">
+                <table class="w-full table-auto">
+                    <thead>
+                        <tr class="text-gray-300">
+                            <th class="px-4 py-2 text-left">ID do Usuário</th>
+                            <th class="px-4 py-2 text-left">Excluir</th>
+                        </tr>
+                    </thead>
+                    <tbody id="user-table">
+                        <tr id="no-users-message">
+                            <td colspan="2" class="text-center text-gray-400 py-6">Nenhum usuário cadastrado ainda.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Popup Form -->
+            <div id="user-popup" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+                <div class="bg-gray-800 p-6 rounded-lg shadow-md w-full max-w-md">
+                    <h3 class="text-lg font-bold mb-4">Adicionar Usuário</h3>
+                    <form id="user-form" class="space-y-4">
+                        <div>
+                            <label for="user-id" class="block text-gray-400">ID do Telegram</label>
+                            <input type="text" id="user-id" class="w-full px-4 py-2 bg-gray-900 text-gray-100 rounded-md border border-gray-700 focus:ring-2 focus:ring-pink-500" placeholder="Ex.: @SeuID" required>
+                        </div>
+                        <div class="space-x-2">
+                            <button type="button" id="cancel-btn" class="px-4 py-2 bg-gray-500 text-gray-100 rounded-md hover:bg-gray-600">Cancelar</button>
+                            <button type="submit" class="px-4 py-2 bg-pink-500 text-gray-100 rounded-md hover:bg-pink-600">Salvar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const addUserBtn = document.getElementById('add-user-btn');
+        const userPopup = document.getElementById('user-popup');
+        const cancelBtn = document.getElementById('cancel-btn');
+        const userForm = document.getElementById('user-form');
+        const userTable = document.getElementById('user-table');
+        const noUsersMessage = document.getElementById('no-users-message');
+
+        // Abrir popup
+        addUserBtn.addEventListener('click', () => {
+            userPopup.classList.remove('hidden');
+        });
+
+        // Fechar popup
+        cancelBtn.addEventListener('click', () => {
+            userPopup.classList.add('hidden');
+        });
+
+        // Submeter formulário
+        userForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const userId = document.getElementById('user-id').value;
+
+            // Criar nova linha
+            const row = document.createElement('tr');
+            row.classList.add('text-gray-300');
+            row.innerHTML = `
+                <td class="px-4 py-2">${userId}</td>
+                <td class="px-4 py-2">
+                    <button class="text-red-500 hover:text-red-700 delete-btn">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+            `;
+
+            // Evento de exclusão
+            const deleteBtn = row.querySelector('.delete-btn');
+            deleteBtn.addEventListener('click', () => {
+                row.remove();
+                checkNoUsers();
+            });
+
+            // Adicionar à tabela
+            userTable.appendChild(row);
+            noUsersMessage.style.display = 'none';
+
+            // Fechar popup e resetar formulário
+            userPopup.classList.add('hidden');
+            userForm.reset();
+        });
+
+        // Verificar se há usuários
+        function checkNoUsers() {
+            if (userTable.children.length === 1) {
+                noUsersMessage.style.display = 'table-row';
+            }
+        }
+    </script>
+</body>
+</html>
